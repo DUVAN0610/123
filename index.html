@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión</title>
+    <style>
+        /* CSS básico */
+   /* CSS dinámico y visual */
+/* CSS moderno y oscuro */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background-color: #2e2e2e;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2 {
+    color: #f1c40f;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    background: #34495e;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+nav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+nav a:hover {
+    background: #f39c12;
+    transform: scale(1.05);
+}
+
+section {
+    display: none;
+    margin-top: 20px;
+    transition: opacity 0.5s ease;
+}
+
+section.active {
+    display: block;
+    opacity: 1;
+}
+
+.form-group {
+    margin: 15px 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #f39c12;
+}
+
+input, select, button {
+    padding: 12px;
+    width: 100%;
+    border: 2px solid #34495e;
+    border-radius: 5px;
+    background: #ecf0f1;
+    color: #2c3e50;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #f39c12;
+    box-shadow: 0 0 5px rgba(243, 156, 18, 0.5);
+    outline: none;
+}
+
+button {
+    background-color: #f39c12;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #e67e22;
+    transform: scale(1.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table, th, td {
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #34495e;
+    color: #ecf0f1;
+}
+
+tr:nth-child(even) {
+    background-color: #3b3b3b;
+}
+
+tr:hover {
+    background-color: #f39c12;
+    color: #2c3e50;
+}
+
+/* Estilos para tarjetas */
+.card {
+    background: #3a3a3a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Gestión</h1>
+        <!-- Menú de Navegación -->
+        <nav>
+            <a href="#" onclick="showSection('inventario')">Inventario</a>
+            <a href="#" onclick="showSection('prestamo')">Préstamo</a>
+            <a href="#" onclick="showSection('prendas')">Prendas</a>
+            <a href="#" onclick="showSection('repuesto')">Repuesto</a>
+            <a href="#" onclick="showSection('accesorios')">Accesorios</a>
+            <a href="#" onclick="showSection('banco')">Banco</a>
+            <a href="#" onclick="showSection('totalVendo')">Total Te Lo Vendo</a>
+        </nav>
+        
+        <!-- Sección Inventario -->
+        <section id="inventario" class="active">
+            <h2>Inventario</h2>
+            <div class="form-group">
+                <label>Nombre del Producto</label>
+                <input type="text" id="nombreProducto" />
+            </div>
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="categoriaProducto">
+                    <option value="prenda">Prenda</option>
+                    <option value="repuesto">Repuesto</option>
+                    <option value="accesorio">Accesorio</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Valor de Compra</label>
+                <input type="number" id="valorCompra" />
+            </div>
+            <div class="form-group">
+                <label>Cantidad Inicial</label>
+                <input type="number" id="cantidadInicial" />
+            </div>
+            <button onclick="agregarProducto()">Agregar Producto</button>
+            
+            <!-- Tabla de Productos -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Valor de Compra</th>
+                        <th>Cantidad Disponible</th>
+                    </tr>
+                </thead>
+                <tbody id="productosTabla"></tbody>
+            </table>
+        </section>
+
+        <!-- Sección Préstamo -->
+        <section id="prestamo">
+            <h2>Préstamo</h2>
+            <div class="form-group">
+                <label>Nombre del Cliente</label>
+                <input type="text" id="nombreClientePrestamo" />
+            </div>
+            <div class="form-group">
+                <label>Valor Prestado</label>
+                <input type="number" id="valorPrestado" />
+            </div>
+            <div class="form-group">
+                <label>Intereses (%)</label>
+                <input type="number" id="interesPrestamo" />
+            </div>
+            <button onclick="registrarPrestamo()">Registrar Préstamo</button>
+
+            <!-- Tabla de Préstamos -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Valor Prestado</th>
+                        <th>Intereses</th>
+                        <th>Total a Pagar</th>
+                    </tr>
+                </thead>
+                <tbody id="prestamosTabla"></tbody>
+            </table>
+        </section>
+
+        <!-- Sección Prendas -->
+        <section id="prendas">
+            <h2>Prendas</h2>
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" id="nombreClientePrenda" />
+            </div>
+            <div class="form-group">
+                <label>Producto</label>
+                <select id="productoPrenda"></select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" id="cantidadPrenda" />
+            </div>
+            <div class="form-group">
+                <label>Intereses (%)</label>
+                <input type="number" id="interesPrenda" />
+            </div>
+            <button onclick="registrarVentaPrenda()">Registrar Venta</button>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total a Pagar</th>
+                    </tr>
+                </thead>
+                <tbody id="ventasPrendasTabla"></tbody>
+            </table>
+        </section>
+
+        <!-- Sección Repuesto -->
+        <section id="repuesto">
+            <h2>Repuesto</h2>
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" id="nombreClienteRepuesto" />
+            </div>
+            <div class="form-group">
+                <label>Producto</label>
+                <select id="productoRepuesto"></select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" id="cantidadRepuesto" />
+            </div>
+            <div class="form-group">
+                <label>Intereses (%)</label>
+                <input type="number" id="interesRepuesto" />
+            </div>
+            <button onclick="registrarVentaRepuesto()">Registrar Venta</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total a Pagar</th>
+                    </tr>
+                </thead>
+                <tbody id="ventasRepuestosTabla"></tbody>
+            </table>
+        </section>
+
+        <!-- Sección Accesorios -->
+        <section id="accesorios">
+            <h2>Accesorios</h2>
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" id="nombreClienteAccesorio" />
+            </div>
+            <div class="form-group">
+                <label>Producto</label>
+                <select id="productoAccesorio"></select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad</label>
+                <input type="number" id="cantidadAccesorio" />
+            </div>
+            <div class="form-group">
+                <label>Intereses (%)</label>
+                <input type="number" id="interesAccesorio" />
+            </div>
+            <button onclick="registrarVentaAccesorio()">Registrar Venta</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Total a Pagar</th>
+                    </tr>
+                </thead>
+                <tbody id="ventasAccesoriosTabla"></tbody>
+            </table>
+        </section>
+
+        <!-- Sección Banco -->
+        <section id="banco">
+            <h2>Banco</h2>
+            <div class="form-group">
+                <label>Nombre del Banco</label>
+                <input type="text" id="nombreBanco" />
+            </div>
+            <div class="form-group">
+                <label>Saldo Inicial</label>
+                <input type="number" id="saldoBanco" />
+            </div>
+            <button onclick="crearBanco()">Crear Banco</button>
+            <div>
+                <h3>Banco: <span id="nombreBancoDisplay"></span></h3>
+                <p>Saldo Actual: <span id="saldoBancoTotal">0</span></p>
+            </div>
+
+            <h3>Transacciones</h3>
+            <div class="form-group">
+                <label>Cliente con Deuda</label>
+                <select id="clienteDeuda"></select>
+            </div>
+            <div class="form-group">
+                <label>Valor a Pagar</label>
+                <input type="number" id="valorPago" />
+            </div>
+            <button onclick="realizarPago()">Realizar Pago</button>
+            <div class="form-group">
+                <label>Agregar Intereses</label>
+                <input type="number" id="valorInteres" />
+            </div>
+            <button onclick="agregarIntereses()">Agregar Intereses</button>
+        </section>
+
+        <!-- Total Te Lo Vendo -->
+        <section id="totalVendo">
+            <h2>Total Te Lo Vendo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Valor Prestado</th>
+                        <th>Intereses</th>
+                        <th>Deuda Total</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="totalVendoTabla"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        let productos = [];
+        let clientes = [];
+        let saldoBanco = 0;
+
+        function showSection(sectionId) {
+            document.querySelectorAll("section").forEach(section => section.classList.remove("active"));
+            document.getElementById(sectionId).classList.add("active");
+        }
+
+        function agregarProducto() {
+            const nombre = document.getElementById("nombreProducto").value;
+            const categoria = document.getElementById("categoriaProducto").value;
+            const valor = parseFloat(document.getElementById("valorCompra").value);
+            const cantidadInicial = parseInt(document.getElementById("cantidadInicial").value);
+
+            const producto = { nombre, categoria, valor, cantidad: cantidadInicial };
+            productos.push(producto);
+            actualizarInventario();
+            actualizarSelects();
+
+            // Descontar del saldo del banco
+            saldoBanco -= valor * cantidadInicial;
+            document.getElementById("saldoBancoTotal").textContent = saldoBanco;
+        }
+
+        function actualizarInventario() {
+            const tabla = document.getElementById("productosTabla");
+            tabla.innerHTML = "";
+            productos.forEach(producto => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${producto.nombre}</td><td>${producto.categoria}</td><td>${producto.valor}</td><td>${producto.cantidad}</td>`;
+                tabla.appendChild(row);
+            });
+        }
+
+        function actualizarSelects() {
+            ["productoPrenda", "productoRepuesto", "productoAccesorio"].forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = "";
+                productos.forEach(producto => {
+                    const option = document.createElement("option");
+                    option.value = producto.valor;
+                    option.text = producto.nombre;
+                    select.appendChild(option);
+                });
+            });
+            actualizarSelectCliente();
+        }
+
+        function actualizarSelectCliente() {
+            const select = document.getElementById("clienteDeuda");
+            select.innerHTML = "";
+            clientes.forEach((cliente, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.text = `${cliente.cliente} - Deuda: ${cliente.totalPagar}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Préstamo
+        function registrarPrestamo() {
+            const cliente = document.getElementById("nombreClientePrestamo").value;
+            const valor = parseFloat(document.getElementById("valorPrestado").value);
+            const interes = parseFloat(document.getElementById("interesPrestamo").value);
+
+            const totalPagar = valor + (valor * interes / 100);
+            clientes.push({ cliente, valor, interes, totalPagar, estado: totalPagar > 0 ? "Abierto" : "Cerrado" });
+            const tabla = document.getElementById("prestamosTabla");
+            const row = document.createElement("tr");
+
+            row.innerHTML = `<td>${cliente}</td><td>${valor}</td><td>${interes}%</td><td>${totalPagar}</td>`;
+            tabla.appendChild(row);
+            actualizarTotalVendo();
+            actualizarSelectCliente();
+        }
+
+        // Prendas
+        function registrarVentaPrenda() {
+            registrarVenta("nombreClientePrenda", "productoPrenda", "cantidadPrenda", "interesPrenda", "ventasPrendasTabla");
+        }
+
+        // Repuesto
+        function registrarVentaRepuesto() {
+            registrarVenta("nombreClienteRepuesto", "productoRepuesto", "cantidadRepuesto", "interesRepuesto", "ventasRepuestosTabla");
+        }
+
+        // Accesorio
+        function registrarVentaAccesorio() {
+            registrarVenta("nombreClienteAccesorio", "productoAccesorio", "cantidadAccesorio", "interesAccesorio", "ventasAccesoriosTabla");
+        }
+
+        function registrarVenta(clienteId, productoId, cantidadId, interesId, tablaId) {
+            const cliente = document.getElementById(clienteId).value;
+            const productoValor = parseFloat(document.getElementById(productoId).value);
+            const cantidad = parseInt(document.getElementById(cantidadId).value);
+            const interes = parseFloat(document.getElementById(interesId).value);
+
+            // Encontrar el producto en el inventario
+            const producto = productos.find(p => p.valor === productoValor);
+            if (producto && producto.cantidad >= cantidad) {
+                const totalPagar = (productoValor * cantidad) + ((productoValor * cantidad) * interes / 100);
+                clientes.push({ cliente, valor: productoValor * cantidad, interes, totalPagar, estado: totalPagar > 0 ? "Abierto" : "Cerrado" });
+
+                // Descontar la cantidad vendida del inventario
+                producto.cantidad -= cantidad;
+
+                // Descontar del saldo del banco
+                saldoBanco -= totalPagar;
+                document.getElementById("saldoBancoTotal").textContent = saldoBanco;
+
+                const tabla = document.getElementById(tablaId);
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${cliente}</td><td>${productoValor}</td><td>${cantidad}</td><td>${totalPagar}</td>`;
+                tabla.appendChild(row);
+                actualizarInventario(); // Actualiza la tabla de inventario
+                actualizarTotalVendo();
+                actualizarSelectCliente();
+            } else {
+                alert("No hay suficiente cantidad disponible en el inventario.");
+            }
+        }
+
+        function crearBanco() {
+            const nombreBanco = document.getElementById("nombreBanco").value;
+            const saldoInicial = parseFloat(document.getElementById("saldoBanco").value);
+            saldoBanco = saldoInicial;
+            document.getElementById("nombreBancoDisplay").textContent = nombreBanco;
+            document.getElementById("saldoBancoTotal").textContent = saldoBanco;
+        }
+
+        function realizarPago() {
+            const indexCliente = document.getElementById("clienteDeuda").value;
+            const valorPago = parseFloat(document.getElementById("valorPago").value);
+            
+            if (indexCliente !== "") {
+                const cliente = clientes[indexCliente];
+                cliente.totalPagar -= valorPago;
+
+                // Sumar el pago al saldo del banco
+                saldoBanco += valorPago;
+
+                if (cliente.totalPagar <= 0) {
+                    cliente.estado = "Cerrado";
+                    cliente.totalPagar = 0; // Aseguramos que no tenga deuda negativa
+                }
+
+                actualizarTotalVendo();
+                actualizarSelectCliente();
+                document.getElementById("saldoBancoTotal").textContent = saldoBanco;
+                alert("Pago registrado con éxito.");
+            } else {
+                alert("Por favor, selecciona un cliente.");
+            }
+        }
+
+        function agregarIntereses() {
+            const indexCliente = document.getElementById("clienteDeuda").value;
+            const valorInteres = parseFloat(document.getElementById("valorInteres").value);
+
+            if (indexCliente !== "") {
+                const cliente = clientes[indexCliente];
+                cliente.totalPagar += valorInteres;
+
+                // Sumar los intereses al saldo del banco
+                saldoBanco += valorInteres;
+
+                actualizarTotalVendo();
+                actualizarSelectCliente();
+                document.getElementById("saldoBancoTotal").textContent = saldoBanco;
+                alert("Intereses agregados con éxito.");
+            } else {
+                alert("Por favor, selecciona un cliente.");
+            }
+        }
+
+        function actualizarTotalVendo() {
+            const tabla = document.getElementById("totalVendoTabla");
+            tabla.innerHTML = "";
+            clientes.forEach(cliente => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${cliente.cliente}</td><td>${cliente.valor}</td><td>${cliente.interes}%</td><td>${cliente.totalPagar}</td><td>${cliente.estado}</td>`;
+                tabla.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
